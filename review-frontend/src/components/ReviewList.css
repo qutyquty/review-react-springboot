@@ -1,0 +1,13 @@
+.table-wrapper {
+  min-height: 450px; /* 테이블 최소 높이 지정 (10개 데이터가 보일 때 높이에 맞춰 설정) */
+}
+
+.pagination-wrapper {
+  margin-top: 20px;   /* 테이블과 간격 */
+  text-align: center; /* 가운데 정렬 */
+}
+
+.page-link {
+    min-width: 50px;
+    text-align: center;
+}

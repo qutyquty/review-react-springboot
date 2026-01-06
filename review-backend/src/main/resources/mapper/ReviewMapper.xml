@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.review.mapper.ReviewMapper">
+
+	<!-- 단일 조회 -->
+	<select id="findById" parameterType="long" resultType="com.example.review.domain.Review">
+		SELECT 
+			id, title, content, poster_path, category_id, tmdb_id, 
+			created_time, updated_time
+		FROM review
+		WHERE id = #{id}
+	</select>
+	
+	<!-- 전체 조회 -->
+	<select id="findAll" resultType="com.example.review.domain.Review">
+		SELECT id, title, content, poster_path, category_id, created_time, updated_time
+		FROM review
+		ORDER BY id DESC
+		LIMIT 30
+	</select>
+	
+	<select id="pagingReviews" resultType="com.example.review.domain.Review">
+		SELECT 
+			id, title, content, poster_path, first_year, category_id, tmdb_id, 
+			created_time, updated_time
+		FROM review
+		WHERE category_id = #{categoryId}
+		
+		<if test="keyword != null and keyword != ''">
+			AND (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%'))
+		</if>
+		
+		ORDER BY id DESC
+		LIMIT #{size} OFFSET #{offset}
+	</select>
+	
+	<select id="countReviews" resultType="int">
+		SELECT COUNT(*) FROM review
+		WHERE category_id = #{categoryId}
+		<if test="keyword != null and keyword != ''">
+			AND (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%'))
+		</if>
+	</select>
+	
+</mapper>
