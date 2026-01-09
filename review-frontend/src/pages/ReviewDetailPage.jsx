@@ -2,15 +2,24 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import ReviewBody from '../components/ReviewBody';
-import ReviewHead from '../components/ReviewHead';
+import MovieDetailPage from './MovieDetailPage';
+import TvDetailPage from './TvDetailPage';
 
 const ReviewDetailPage = () => {
-  const { id, tmdbId } = useParams();
+  const { id, tmdbId, categoryId } = useParams();
+  const numericTmdbId = tmdbId ? Number(tmdbId) : 0;
+
+  console.log(typeof categoryId, categoryId);
+  let DetailComponent;
+  if (categoryId === "1") {
+    DetailComponent = <MovieDetailPage tmdbId={tmdbId} />
+  } else {
+    DetailComponent = <TvDetailPage tmdbId={tmdbId} />
+  }
 
   return (
     <section className='mt-4'>
-      <h2 className='mb-4'>리뷰 상세</h2>
-      <ReviewHead tmdbId={tmdbId} />
+      {DetailComponent}
       <ReviewBody reviewId={id} />
     </section>
   );

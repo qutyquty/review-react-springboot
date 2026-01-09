@@ -1,0 +1,4 @@
+.main-content {
+  padding-top: 3rem; /* rem: 폰트사이즈 기준으로 가변적으로 변경 */
+  padding-bottom: 5rem; /* 폰트사이즈 16px면 16x5=80px */
+}

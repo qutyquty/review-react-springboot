@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/reviews";
+const BASE_URL = "http://localhost:8080/api/reviews";
 
 export const getReviews = async () => {
     const response = await fetch(BASE_URL);

@@ -36,7 +36,10 @@ dependencies {
 	
 	// Swagger(OpenAPI)
 	// /swagger-ui/index.html
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'	
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+	
+	// WebFlux: 비동기/논블로킹 방식(<->RestTemplate: 동기/블로킹 방식)
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 tasks.named('test') {

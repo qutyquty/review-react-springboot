@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/reviews")
+@RequestMapping("/api/reviews")
 @Tag(name = "Review API", description = "리뷰 CRUD API")
 public class ReviewController {
 	

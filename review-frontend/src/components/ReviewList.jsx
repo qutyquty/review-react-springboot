@@ -94,7 +94,7 @@ const ReviewList = () => {
                         <tr key={review.id}>
                             <td>{totalCount - ((pagingInfo.currentPage - 1) * size + index)}</td>
                             <td className='text-start'>
-                                <Link to={`/reviews/${review.id}/${review.tmdbId}`}>{review.title}</Link>
+                                <Link to={`/review/${categoryId}/${review.id}/${review.tmdbId}`}>{review.title}</Link>
                             </td>
                             <td>{review.firstYear}</td>
                             <td>{dayjs(review.createdTime).format("YYYY-MM-DD HH:mm:ss")}</td>

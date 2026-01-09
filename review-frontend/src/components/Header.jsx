@@ -10,12 +10,21 @@ const Header = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav ms-auto">
+            <ul className="navbar-nav">
               <li className="nav-item">
                 <a className="nav-link" href="/">Home</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/reviews">Reviews</a>
+                <a className="nav-link" href="/">영화</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/">드라마</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/">애니</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/">도서</a>
               </li>
             </ul>
           </div>

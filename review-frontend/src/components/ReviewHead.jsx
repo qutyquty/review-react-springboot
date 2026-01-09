@@ -1,33 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+
+import { getMovieDetail } from '../api/tmdbApi';
 
 const ReviewHead = ({ tmdbId }) => {
   const [movie, setMovie] = useState(null);
   const [cast, setCast] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("tmdbId: ", tmdbId);
-        const apiKey = "a5b57bbbffa91e1b1a044b0516974c3c"; // TMDB API 키
-        const movieRes = await axios.get(
-          `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${apiKey}&language=ko-KR`
-        );
-        const castRes = await axios.get(
-          `https://api.themoviedb.org/3/movie/${tmdbId}/credits?api_key=${apiKey}&language=ko-KR`
-        );
-
-        setMovie(movieRes.data);
-        setCast(castRes.data.cast);
-      } catch (error) {
-        console.error("TMDB 데이터 가져오기 오류:", error);
-      }
-    };
-
-    fetchData();
+    if (tmdbId > 0) {
+      fetchMovieDetail(tmdbId);
+    }
+    setLoading(false);
   }, [tmdbId]);
 
-  if (!movie) return <p>로딩 중...</p>;
+  const fetchMovieDetail = async (tmdbId) => {
+    try {
+      const data = await getMovieDetail(tmdbId);
+      setMovie(data);
+      setCast(data.cast);
+    } catch (error) {
+      console.error("fetchMovieDetail 에러: ", error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className='text-center mt-5'>
+        <div className='spinner-border text-primary' role='status'>
+          <span className='visually-hidden'>Loading ...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!loading && !movie) {
+    return (
+      <div className="mt-5 mb-4 p-3 border border-danger rounded bg-light text-start">
+        <span className="text-danger fw-bold">TMDB에서 데이터를 가져오지 못했습니다.</span>
+      </div>
+    );
+  }
 
    return (
     <div className="mb-4">
@@ -37,7 +52,7 @@ const ReviewHead = ({ tmdbId }) => {
             position: "relative",
             backgroundImage: `url(https://image.tmdb.org/t/p/w1280${movie.backdrop_path})`,
             backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundPosition: "top",
             borderRadius: "8px",
             minHeight: "500px",
             color: "white",
@@ -67,10 +82,9 @@ const ReviewHead = ({ tmdbId }) => {
                 textShadow: "2px 2px 6px rgba(0,0,0,0.8)" // 글자 또렷하게
             }}
         >
-    <h2 className="fw-bold">{movie.title}</h2>
-    <p className="mt-3">{movie.overview}</p>
-  </div>
-
+          <h2 className="fw-bold">{movie.title}</h2>
+          <p className="mt-3">{movie.overview}</p>
+        </div>
       </div>
 
       {/* 포스터 + 출연 배우 */}
@@ -89,7 +103,7 @@ const ReviewHead = ({ tmdbId }) => {
           <h5 className="mb-3">출연 배우</h5>
           <div className="d-flex flex-wrap">
             {cast.slice(0, 12).map((actor) => (
-              <div
+              <div              
                 key={actor.cast_id}
                 className="me-3 mb-3 text-center"
                 style={{ width: "100px" }}
@@ -98,7 +112,7 @@ const ReviewHead = ({ tmdbId }) => {
                   src={
                     actor.profile_path
                       ? `https://image.tmdb.org/t/p/w200${actor.profile_path}`
-                      : "https://via.placeholder.com/100x150?text=No+Image"
+                      : "https://placehold.co/100x150?text=No+Image"
                   }
                   alt={actor.name}
                   className="rounded"
@@ -106,7 +120,9 @@ const ReviewHead = ({ tmdbId }) => {
                     width: "100px",
                     height: "150px",
                     objectFit: "cover",
+                    cursor: "pointer",
                   }}
+                  onClick={() => navigate(`/person/${actor.id}/detail`)}
                 />
                 <small className="d-block mt-1">{actor.name}</small>
               </div>

@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_review?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+    username: db_review_user
+    password: 1234
+
+tmdb:
+  api:
+    key: a5b57bbbffa91e1b1a044b0516974c3c

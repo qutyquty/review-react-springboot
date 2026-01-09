@@ -28,8 +28,8 @@ const ReviewBody = ({ reviewId }) => {
     <div className='card'>
         <div className='card-body'>
             <p className='card-text' style={{ whiteSpace: "pre-line" }}>{review.content}</p>
-            <p><strong>작성일자:</strong> {dayjs(review.createdTime).format("YYYY-MM-DD HH:mm:ss")}</p>
-            <p><strong>수정일자:</strong> {dayjs(review.updatedTime).format("YYYY-MM-DD HH:mm:ss")}</p>
+            <p className='small text-muted'><strong>작성일자:</strong> {dayjs(review.createdTime).format("YYYY-MM-DD HH:mm:ss")}</p>
+            <p className='small text-muted'><strong>수정일자:</strong> {dayjs(review.updatedTime).format("YYYY-MM-DD HH:mm:ss")}</p>
         </div>
     </div>
   );
