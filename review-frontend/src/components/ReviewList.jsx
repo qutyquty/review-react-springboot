@@ -5,9 +5,8 @@ import dayjs from 'dayjs';
 import { getPagingReviews } from '../api/reviewApi';
 import "./ReviewList.css";
 
-const ReviewList = () => {
+const ReviewList = ({ categoryId }) => {
     const [reviews, setReviews] = useState([]);
-    const [categoryId, setCategoryId] = useState(1); // 기본값: 영화
     const [keyword, setKeyword] = useState("");
     const [totalCount, setTotalCount] = useState(0);
     const [size, setSize] = useState(10);
@@ -47,30 +46,32 @@ const ReviewList = () => {
         fetchData(1, categoryId, keyword);
     };
 
+    const categoryMap = {
+        1: "영화",
+        2: "드라마",
+        3: "애니",
+        4: "도서"
+    };
+
   return (
     <section>
         <div className='table-wrapper'>
             <div className='row mb-3'>
                 <div className='col-md-3'>
-                    <select className='form-select'
-                        value={categoryId}
-                        onChange={(e) => setCategoryId(Number(e.target.value))}
-                    >
-                        <option value={1}>영화</option>
-                        <option value={2}>드라마</option>
-                        <option value={3}>애니</option>
-                        <option value={4}>도서</option>
-                    </select>
+                    <h3>{categoryMap[categoryId]}</h3>
                 </div>
-                <div className='col-md-1'></div>
-                <div className='col-md-6'>
+                <div className='col-md-3'></div>
+                <div className='col-md-3'>
                     <input type='text' className='form-control'
                         placeholder='검색어 입력' value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
                     />
                 </div>
-                <div className='col-md-2'>
+                <div className='col-md-1'>
                     <button className='btn btn-primary w-100' onClick={handleSearch}>검색</button>
+                </div>
+                <div className='col-md-2'>
+                    <Link to={`/reviews/${categoryId}`} className='btn btn-primary w-100'>작성하기</Link>
                 </div>
             </div>
 

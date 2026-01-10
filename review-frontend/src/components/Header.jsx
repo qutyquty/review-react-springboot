@@ -15,16 +15,16 @@ const Header = () => {
                 <a className="nav-link" href="/">Home</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/">영화</a>
+                <a className="nav-link" href="/reviews/movies">영화</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/">드라마</a>
+                <a className="nav-link" href="/reviews/dramas">드라마</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/">애니</a>
+                <a className="nav-link" href="/reviews/animes">애니</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/">도서</a>
+                <a className="nav-link" href="/reviews/books">도서</a>
               </li>
             </ul>
           </div>

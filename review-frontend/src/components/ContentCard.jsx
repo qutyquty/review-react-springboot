@@ -17,8 +17,6 @@ const ContentCard = ({ id, title, posterPath, overview, releaseDate, type }) => 
     ? `https://image.tmdb.org/t/p/w300${posterPath}`
     : "https://placehold.co/300x450?text=No+Image";
 
-    console.log("overview: ", overview);
-
   return (
     <Card className='mb-4 shadow-sm h-100' style={{ width: '18rem', cursor: "pointer" }}
       onClick={handleClick}

@@ -11,6 +11,7 @@ import com.example.review.dto.ActorDetailResponse;
 import com.example.review.dto.ActorMovieCreditsResponse;
 import com.example.review.dto.ActorTvCreditsResponse;
 import com.example.review.dto.MovieDetailResponse;
+import com.example.review.dto.SearchTitleResponse;
 import com.example.review.dto.TvDetailResponse;
 
 import reactor.core.publisher.Mono;
@@ -173,5 +174,18 @@ public class TmdbService {
 					detail.setCast(credits.getCast()); // cast 리스트를 합침
 					return detail;
 				});
+	}
+	
+	// 영화+tv 제목 검색
+	public Mono<SearchTitleResponse> searchTitle(String query) {
+		return webClient.get()
+				.uri(uriBuilder -> uriBuilder
+						.path("/search/multi")
+						.queryParam("api_key", apiKey)
+						.queryParam("language", "ko-KR")
+						.queryParam("query", query)
+						.build())
+				.retrieve()
+				.bodyToMono(SearchTitleResponse.class);
 	}
 }

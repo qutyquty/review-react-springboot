@@ -32,7 +32,7 @@ const TvDetailPage = ({ tmdbId }) => {
             <p>Loading...</p>
         </Container>
         )
-    };    
+    };
 
   return (
     <DetailLayout

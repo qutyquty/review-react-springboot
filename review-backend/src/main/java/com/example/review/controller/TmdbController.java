@@ -4,10 +4,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.review.dto.ActorDetailResponse;
 import com.example.review.dto.MovieDetailResponse;
+import com.example.review.dto.SearchTitleResponse;
 import com.example.review.dto.TvDetailResponse;
 import com.example.review.service.TmdbService;
 
@@ -38,6 +40,11 @@ public class TmdbController {
 	@GetMapping("/tv/{id}")
 	public Mono<TvDetailResponse> getTvDetail(@PathVariable("id") Long id) {
 		return tmdbService.getTvDetail(id);
+	}
+	
+	@GetMapping("/multi/search")
+	public Mono<SearchTitleResponse> searchMovies(@RequestParam("query") String query) {
+		return tmdbService.searchTitle(query);
 	}
 
 }

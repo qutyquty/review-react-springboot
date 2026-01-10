@@ -25,11 +25,13 @@ const ReviewBody = ({ reviewId }) => {
     if (!review) return <p>리뷰를 찾을 수 없습니다.</p>;
 
   return (
-    <div className='card'>
-        <div className='card-body'>
-            <p className='card-text' style={{ whiteSpace: "pre-line" }}>{review.content}</p>
-            <p className='small text-muted'><strong>작성일자:</strong> {dayjs(review.createdTime).format("YYYY-MM-DD HH:mm:ss")}</p>
-            <p className='small text-muted'><strong>수정일자:</strong> {dayjs(review.updatedTime).format("YYYY-MM-DD HH:mm:ss")}</p>
+    <div className='container mt-3'>
+        <div className='card'>
+            <div className='card-body'>
+                <p className='card-text' style={{ whiteSpace: "pre-line" }}>{review.content}</p>
+                <p className='small text-muted'><strong>작성일자:</strong> {dayjs(review.createdTime).format("YYYY-MM-DD HH:mm:ss")}</p>
+                <p className='small text-muted'><strong>수정일자:</strong> {dayjs(review.updatedTime).format("YYYY-MM-DD HH:mm:ss")}</p>
+            </div>
         </div>
     </div>
   );

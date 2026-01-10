@@ -37,3 +37,16 @@ export const getTvDetail = async (id) => {
         throw error;
     }
 };
+
+// 제목 조회
+export const getSearchTitle = async (query) => {
+    try {
+        const response = await tmdbApi.get(`/multi/search`, {
+            params: { query },
+        });
+        return response.data.results;
+    } catch (error) {
+        console.error("getSearchTitle 에러: ", error);
+        throw error;
+    }
+};

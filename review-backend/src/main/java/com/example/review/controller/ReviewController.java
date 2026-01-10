@@ -1,20 +1,27 @@
 package com.example.review.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.review.domain.Review;
+import com.example.review.dto.LastestReviewResponse;
+import com.example.review.dto.ReviewCreateRequest;
+import com.example.review.dto.ReviewResponse;
 import com.example.review.service.ReviewService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -30,13 +37,13 @@ public class ReviewController {
 	
 	@Operation(summary = "리뷰 단일 조회", description = "ID로 리뷰를 조회합니다.")
 	@GetMapping("/{id}")
-	public Review getReviewById(@PathVariable("id") Long id) {
+	public ReviewResponse getReviewById(@PathVariable("id") Long id) {
 		return reviewService.getReviewById(id);
 	}
 	
 	@Operation(summary = "리뷰 전체 조회", description = "모든 리뷰를 조히합니다.")
 	@GetMapping
-	public List<Review> getAllReviews() {
+	public List<ReviewResponse> getAllReviews() {
 		return reviewService.getAllReviews();
 	}
 	
@@ -47,6 +54,23 @@ public class ReviewController {
 			@RequestParam(value = "categoryId", defaultValue = "1") int categoryId,
 			@RequestParam(value = "keyword", defaultValue = "") String keyword) {
 		return reviewService.getPagingReviews(page, size, categoryId, keyword);
+	}
+	
+	@GetMapping("/home")
+	public Map<String, List<LastestReviewResponse>> getHomeData() {
+		return Map.of(
+				"movies", reviewService.getLastestReview(1),
+				"dramas", reviewService.getLastestReview(2),
+				"animes", reviewService.getLastestReview(3),
+				"books", reviewService.getLastestReview(4)
+		);				
+	}
+	
+	@PostMapping
+	public ResponseEntity<Void> create(@RequestBody @Valid ReviewCreateRequest req) {
+		reviewService.createReview(req);
+		
+		return ResponseEntity.created(URI.create("/api/reviews")).build();
 	}
 
 }

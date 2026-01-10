@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.example.review.domain.Review;
+import com.example.review.dto.LastestReviewResponse;
+import com.example.review.dto.ReviewCreateRequest;
+import com.example.review.dto.ReviewResponse;
 import com.example.review.mapper.ReviewMapper;
 
 @Service
@@ -19,18 +22,21 @@ public class ReviewService {
 	}
 	
 	// 단일 조회
-	public Review getReviewById(Long id) {
+	@Transactional(readOnly = true)
+	public ReviewResponse getReviewById(Long id) {
 		return reviewMapper.findById(id);
 	}
 	
 	// 전체 조회
-	public List<Review> getAllReviews() {
+	@Transactional(readOnly = true)
+	public List<ReviewResponse> getAllReviews() {
 		return reviewMapper.findAll();
 	}
 	
+	@Transactional(readOnly = true)
 	public Map<String, Object> getPagingReviews(int page, int size, int categoryId, String keyword) {
 		int offset = (page - 1) * size;
-		List<Review> reviews = reviewMapper.pagingReviews(size, offset, categoryId, keyword);
+		List<ReviewResponse> reviews = reviewMapper.pagingReviews(size, offset, categoryId, keyword);
 		int totalCount = reviewMapper.countReviews(categoryId, keyword);
 		int totalPages = (int) Math.ceil((double) totalCount / size);
 		
@@ -50,6 +56,16 @@ public class ReviewService {
 		result.put("totalCount", totalCount);
 				
 		return result;
+	}
+	
+	@Transactional(readOnly = true)
+	public List<LastestReviewResponse> getLastestReview(int categoryId) {
+		return reviewMapper.findLastestReview(categoryId);
+	}
+	
+	@Transactional
+	public void createReview(ReviewCreateRequest req) {
+		reviewMapper.insert(req);
 	}
 	
 }

@@ -1,4 +1,4 @@
-package com.example.review.domain;
+package com.example.review.dto;
 
 import java.time.LocalDateTime;
 
@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Review {
+public class ReviewResponse {
 	
 	private Long id;
 	private String title;
