@@ -54,11 +54,24 @@
 		LIMIT 5
 	</select>
 	
-	<insert id="insert" parameterType="com.example.review.dto.ReviewCreateRequest">
+	<insert id="insertReview" parameterType="com.example.review.dto.ReviewCreateRequest" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO review
-		(category_id, tmdb_id, title, content, created_time)
+		(category_id, tmdb_id, title, content, poster_path, created_time)
 		VALUES
-		(#{req.categoryId}, #{req.tmdbId}, #{req.title}, #{req.content}, NOW())
+		(#{req.categoryId}, #{req.tmdbId}, #{req.title}, #{req.content}, #{req.posterPath}, NOW())
 	</insert>
+	
+	<delete id="deleteReview" parameterType="long">
+		DELETE FROM review
+		WHERE id = #{id}
+	</delete>
+	
+	<update id="updateReview" parameterType="com.example.review.dto.ReviewUpdateRequest">
+		UPDATE review
+		SET title = #{req.title}, content = #{req.content}, 
+			tmdb_id = #{req.tmdbId}, poster_path = #{req.posterPath}, 
+			updated_time = NOW()
+		WHERE id = #{id}
+	</update>
 	
 </mapper>

@@ -28,7 +28,8 @@ const App = () => {
             <Route path="/person/:id/detail" element={<ActorDetailPage />} />
             <Route path="/movie/:id" element={<MovieDetailPage />} />
             <Route path="/tv/:id" element={<TvDetailPage />} />
-            <Route path="/reviews/:categoryId" element={<ReviewForm />} />
+            <Route path="/reviews/new/:categoryId" element={<ReviewForm mode="create" />} />
+            <Route path="/reviews/:categoryId/:id/:tmdbId/edit" element={<ReviewForm mode="edit" />} />
           </Routes>
         </main>
         <Footer />

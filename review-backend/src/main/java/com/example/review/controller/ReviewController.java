@@ -1,14 +1,16 @@
 package com.example.review.controller;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.review.dto.LastestReviewResponse;
 import com.example.review.dto.ReviewCreateRequest;
 import com.example.review.dto.ReviewResponse;
+import com.example.review.dto.ReviewUpdateRequest;
 import com.example.review.service.ReviewService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -67,10 +70,33 @@ public class ReviewController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Void> create(@RequestBody @Valid ReviewCreateRequest req) {
-		reviewService.createReview(req);
+	public ResponseEntity<Long> createReview(@RequestBody @Valid ReviewCreateRequest req) {
+		Long id = reviewService.createReview(req);
 		
-		return ResponseEntity.created(URI.create("/api/reviews")).build();
+		return ResponseEntity.status(HttpStatus.CREATED).body(id);
 	}
-
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteReview(@PathVariable("id") Long id) {
+		boolean deleted = reviewService.deleteReview(id);
+		
+		if (deleted) {
+			return ResponseEntity.noContent().build(); // 204 No content
+		} else {
+			return ResponseEntity.notFound().build(); // 404 Not Found
+		}
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateReview(
+			@PathVariable("id") Long id,
+			@RequestBody ReviewUpdateRequest req) {
+		boolean updated = reviewService.updateReview(id, req);
+		
+		if (updated) {
+			return ResponseEntity.noContent().build(); // 204 No content
+		} else {
+			return ResponseEntity.notFound().build(); // 404 Not Found
+		}
+	}
 }

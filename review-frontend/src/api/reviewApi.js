@@ -55,4 +55,37 @@ export const saveReview = async (selectedMovie, review) => {
         console.error(error);
         throw error;
     }
-}
+};
+
+export const deleteReview = async (id) => {
+    const response = await fetch(`${BASE_URL}/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    if (!response.ok) throw new Error("deleteReview 에러");
+    
+    return response;
+};
+
+export const updateReview = async (id, selectedMovie, review) => {
+    const response = await fetch(`${BASE_URL}/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            tmdbId: selectedMovie?.id,
+            posterPath: selectedMovie?.poster_path,
+            title: review.title,
+            content: review.content,
+            categoryId: review.categoryId,
+        }),
+    });
+
+    if (!response.ok) throw new Error("updateReview 에러");
+    
+    return response;
+};

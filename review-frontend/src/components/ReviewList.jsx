@@ -60,18 +60,18 @@ const ReviewList = ({ categoryId }) => {
                 <div className='col-md-3'>
                     <h3>{categoryMap[categoryId]}</h3>
                 </div>
-                <div className='col-md-3'></div>
+                <div className='col-md-2'></div>
                 <div className='col-md-3'>
                     <input type='text' className='form-control'
                         placeholder='검색어 입력' value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
                     />
                 </div>
-                <div className='col-md-1'>
+                <div className='col-md-2'>
                     <button className='btn btn-primary w-100' onClick={handleSearch}>검색</button>
                 </div>
                 <div className='col-md-2'>
-                    <Link to={`/reviews/${categoryId}`} className='btn btn-primary w-100'>작성하기</Link>
+                    <Link to={`/reviews/new/${categoryId}`} className='btn btn-primary w-100'>작성하기</Link>
                 </div>
             </div>
 

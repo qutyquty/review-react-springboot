@@ -1,23 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Form, Row, Col, Card } from "react-bootstrap";
-import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getSearchTitle } from '../api/tmdbApi';
 import TvDetailPage from './TvDetailPage';
 import MovieDetailPage from './MovieDetailPage';
-import { saveReview } from '../api/reviewApi';
+import { getReviewById, saveReview, updateReview } from '../api/reviewApi';
 
-const ReviewForm = () => {
-  const { categoryId } = useParams();
+const ReviewForm = ({ mode }) => {
+  const { categoryId, id, tmdbId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [review, setReview] = useState({ 
-    title: "", content: "", categoryId: categoryId, 
+    title: "", content: "", categoryId: categoryId,
   });
   const navigate = useNavigate();
+
+  // 수정 모드일 때 초기값 채우기
+  useEffect(() => {
+    if (mode === "edit" && id) {
+      fetchData(id);
+      setSelectedMovie((prev) => ({
+        ... prev,
+        id: tmdbId,
+      }));
+    }
+  }, [mode, id]);
+
+  const fetchData = async (id) => {
+      try {
+          const data = await getReviewById(id);
+          setReview(data);
+      } catch (err) {
+          console.error(err);
+      }
+  };  
 
   // TMDB 검색
   const handleSearch = async () => {
@@ -28,11 +47,15 @@ const ReviewForm = () => {
   // 리뷰 저장
   const handleSave = async () => {
     try {
-      await saveReview(selectedMovie, review);
-      alert("리뷰가 저장되었습니다!");
-      navigate("/");
+      if (mode === "create") {
+        await saveReview(selectedMovie, review);
+        navigate("/");
+      } else {
+        await updateReview(id, selectedMovie, review);
+        navigate(`/review/${categoryId}/${id}/${selectedMovie.id}`);
+      }
     } catch (error) {
-      alert("리뷰 저장 중 오류가 발생했습니다.");
+      alert("오류가 발생했습니다.");
     }
   };
 
@@ -79,7 +102,7 @@ const ReviewForm = () => {
               />
             </Form.Group>
             <Button variant="success" onClick={handleSave}>
-              저장하기
+              {mode === "edit" ? "수정" : "등록"}
             </Button>
           </Form>
         </Col>

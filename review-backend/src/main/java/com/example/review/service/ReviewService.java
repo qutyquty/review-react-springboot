@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.review.dto.LastestReviewResponse;
 import com.example.review.dto.ReviewCreateRequest;
 import com.example.review.dto.ReviewResponse;
+import com.example.review.dto.ReviewUpdateRequest;
 import com.example.review.mapper.ReviewMapper;
 
 @Service
@@ -64,8 +65,20 @@ public class ReviewService {
 	}
 	
 	@Transactional
-	public void createReview(ReviewCreateRequest req) {
-		reviewMapper.insert(req);
+	public Long createReview(ReviewCreateRequest req) {
+		reviewMapper.insertReview(req);
+		return req.getId(); // MyBatis가 자동으로 채워준 PK
 	}
 	
+	@Transactional
+	public boolean deleteReview(Long id) {
+		int rows = reviewMapper.deleteReview(id);
+		return rows > 0; // 삭제 성공 여부 반환
+	}
+	
+	@Transactional
+	public boolean updateReview(Long id, ReviewUpdateRequest req) {
+		int rows = reviewMapper.updateReview(id, req);
+		return rows > 0; // 수정 성공 여부 반환
+	}
 }

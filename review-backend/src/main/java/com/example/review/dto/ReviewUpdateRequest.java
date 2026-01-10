@@ -4,9 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class ReviewCreateRequest {
-	
-	private Long id;
+public class ReviewUpdateRequest {
 	
 	private Long tmdbId;
 	
@@ -17,6 +15,6 @@ public class ReviewCreateRequest {
 	private String content;
 	
 	private int categoryId;
-	private String posterPath;
+	private String posterPath;	
 
 }

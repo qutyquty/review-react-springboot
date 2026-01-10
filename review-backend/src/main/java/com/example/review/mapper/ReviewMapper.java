@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.example.review.dto.LastestReviewResponse;
 import com.example.review.dto.ReviewCreateRequest;
 import com.example.review.dto.ReviewResponse;
+import com.example.review.dto.ReviewUpdateRequest;
 
 @Mapper
 public interface ReviewMapper {
@@ -20,6 +21,10 @@ public interface ReviewMapper {
 	
 	List<LastestReviewResponse> findLastestReview(int categoryId);
 	
-	int insert(@Param("req") ReviewCreateRequest req);
+	int insertReview(@Param("req") ReviewCreateRequest req);
+	
+	int deleteReview(Long id);
+	
+	int updateReview(@Param("id") Long id, @Param("req") ReviewUpdateRequest req);
 
 }
