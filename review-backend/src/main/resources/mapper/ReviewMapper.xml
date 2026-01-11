@@ -56,9 +56,9 @@
 	
 	<insert id="insertReview" parameterType="com.example.review.dto.ReviewCreateRequest" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO review
-		(category_id, tmdb_id, title, content, poster_path, created_time)
+		(category_id, tmdb_id, title, content, poster_path, first_year, created_time)
 		VALUES
-		(#{req.categoryId}, #{req.tmdbId}, #{req.title}, #{req.content}, #{req.posterPath}, NOW())
+		(#{req.categoryId}, #{req.tmdbId}, #{req.title}, #{req.content}, #{req.posterPath}, #{req.firstYear}, NOW())
 	</insert>
 	
 	<delete id="deleteReview" parameterType="long">
@@ -69,7 +69,8 @@
 	<update id="updateReview" parameterType="com.example.review.dto.ReviewUpdateRequest">
 		UPDATE review
 		SET title = #{req.title}, content = #{req.content}, 
-			tmdb_id = #{req.tmdbId}, poster_path = #{req.posterPath}, 
+			tmdb_id = #{req.tmdbId}, poster_path = #{req.posterPath},
+			first_year = #{req.firstYear}, 
 			updated_time = NOW()
 		WHERE id = #{id}
 	</update>

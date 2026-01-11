@@ -18,5 +18,6 @@ public class ReviewCreateRequest {
 	
 	private int categoryId;
 	private String posterPath;
+	private String firstYear;
 
 }

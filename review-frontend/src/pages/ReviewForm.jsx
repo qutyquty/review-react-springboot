@@ -12,7 +12,8 @@ const ReviewForm = ({ mode }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [page, setPage] = useState(1);
+  const [selectedMT, setSelectedMT] = useState(null);
   const [review, setReview] = useState({ 
     title: "", content: "", categoryId: categoryId,
   });
@@ -22,7 +23,7 @@ const ReviewForm = ({ mode }) => {
   useEffect(() => {
     if (mode === "edit" && id) {
       fetchData(id);
-      setSelectedMovie((prev) => ({
+      setSelectedMT((prev) => ({
         ... prev,
         id: tmdbId,
       }));
@@ -40,19 +41,36 @@ const ReviewForm = ({ mode }) => {
 
   // TMDB 검색
   const handleSearch = async () => {
-    const data = await getSearchTitle(searchQuery);
+    setPage(1); // 새 검색이므로 페이지 초기화
+    const data = await getSearchTitle(searchQuery, 1);
     setSearchResults(data);
   };
 
-  // 리뷰 저장
+  // tmdb는 검색 api 요청시 넘어오는 데이터는 최대 20개다.
+  // 검색 데이터가 20가 넘을 경우 더보기 버튼으로 처리
+  const handleLoadMore = async () => {
+    const nextPage = page + 1;
+    const data = await getSearchTitle(searchQuery, nextPage);
+    setSearchResults((prev) => [...prev, ...data]);
+    setPage(nextPage);
+  };
+
+  // 리뷰 저장&업데이트
   const handleSave = async () => {
     try {
+      let firstYear = "";
+      if (selectedMT?.media_type === "movie" && selectedMT?.release_date) {
+        firstYear = selectedMT?.release_date.substring(0, 4);
+      } else if (selectedMT?.media_type === "tv" && selectedMT?.first_air_date) {
+        firstYear = selectedMT?.first_air_date.substring(0, 4);
+      }
+
       if (mode === "create") {
-        await saveReview(selectedMovie, review);
+        await saveReview(selectedMT, review, firstYear);
         navigate("/");
       } else {
-        await updateReview(id, selectedMovie, review);
-        navigate(`/review/${categoryId}/${id}/${selectedMovie.id}`);
+        await updateReview(id, selectedMT, review, firstYear);
+        navigate(`/review/${categoryId}/${id}/${selectedMT.id}`);
       }
     } catch (error) {
       alert("오류가 발생했습니다.");
@@ -66,13 +84,13 @@ const ReviewForm = ({ mode }) => {
         <Col md={12} className="mb-4">
           <Button onClick={() => setShowModal(true)}>TMDB 검색</Button>
 
-          {selectedMovie && (
+          {selectedMT && (
             <Card className='mt-3'>
             <Card.Body className='pt-0'>
             {categoryId == 1 ? (
-                <MovieDetailPage tmdbId={selectedMovie.id} />
+                <MovieDetailPage tmdbId={selectedMT.id} />
             ) : (
-                <TvDetailPage tmdbId={selectedMovie.id} />
+                <TvDetailPage tmdbId={selectedMT.id} />
             )}
             </Card.Body>
             </Card>
@@ -111,7 +129,7 @@ const ReviewForm = ({ mode }) => {
       {/* TMDB 검색 모달 */}
       <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>TMDB 영화 검색</Modal.Title>
+          <Modal.Title>TMDB 검색</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form className="d-flex mb-3">
@@ -126,26 +144,33 @@ const ReviewForm = ({ mode }) => {
             </Button>
           </Form>
           <Row>
-            {searchResults.map((movie) => (
-              <Col md={3} key={movie.id} className="mb-3">
+            {searchResults.map((mt) => (
+              <Col md={3} key={mt.id} className="mb-3">
                 <Card
                   onClick={() => {
-                    setSelectedMovie(movie);
+                    setSelectedMT(mt);
                     setShowModal(false);
                   }}
                   style={{ cursor: "pointer" }}
                 >
                   <Card.Img
                     variant="top"
-                    src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                    src={
+                      mt.poster_path
+                      ? `https://image.tmdb.org/t/p/w200${mt.poster_path}`
+                      : "https://placehold.co/200x300?text=No+Image"
+                    }
                   />
                   <Card.Body>
-                    <Card.Title>{movie.title}</Card.Title>
+                    <Card.Title>{mt.title}</Card.Title>
                   </Card.Body>
                 </Card>
               </Col>
             ))}
           </Row>
+          <div className='text-center mt-3'>
+            <Button onClick={handleLoadMore}>더보기</Button>
+          </div>
         </Modal.Body>
       </Modal>
     </div>

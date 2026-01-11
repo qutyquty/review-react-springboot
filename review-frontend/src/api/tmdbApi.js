@@ -39,10 +39,13 @@ export const getTvDetail = async (id) => {
 };
 
 // 제목 조회
-export const getSearchTitle = async (query) => {
+export const getSearchTitle = async (query, page = 1) => {
     try {
         const response = await tmdbApi.get(`/multi/search`, {
-            params: { query },
+            params: { 
+                query: query,
+                page: page, 
+            },
         });
         return response.data.results;
     } catch (error) {

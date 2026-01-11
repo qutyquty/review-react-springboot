@@ -177,13 +177,14 @@ public class TmdbService {
 	}
 	
 	// 영화+tv 제목 검색
-	public Mono<SearchTitleResponse> searchTitle(String query) {
+	public Mono<SearchTitleResponse> searchTitle(String query, int page) {
 		return webClient.get()
 				.uri(uriBuilder -> uriBuilder
 						.path("/search/multi")
 						.queryParam("api_key", apiKey)
 						.queryParam("language", "ko-KR")
 						.queryParam("query", query)
+						.queryParam("page", page)
 						.build())
 				.retrieve()
 				.bodyToMono(SearchTitleResponse.class);

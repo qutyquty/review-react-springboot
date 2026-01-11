@@ -15,6 +15,7 @@ public class ReviewUpdateRequest {
 	private String content;
 	
 	private int categoryId;
-	private String posterPath;	
+	private String posterPath;
+	private String firstYear;
 
 }

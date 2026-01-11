@@ -43,8 +43,10 @@ public class TmdbController {
 	}
 	
 	@GetMapping("/multi/search")
-	public Mono<SearchTitleResponse> searchMovies(@RequestParam("query") String query) {
-		return tmdbService.searchTitle(query);
+	public Mono<SearchTitleResponse> searchTtile(
+			@RequestParam("query") String query, 
+			@RequestParam("page") int page) {
+		return tmdbService.searchTitle(query, page);
 	}
 
 }

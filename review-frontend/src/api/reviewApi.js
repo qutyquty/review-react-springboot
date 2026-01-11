@@ -30,7 +30,7 @@ export const getLastestReview = async () => {
     return response.json();
 };
 
-export const saveReview = async (selectedMovie, review) => {
+export const saveReview = async (selectedMT, review, firstYear) => {
     try {
         const response = await fetch(BASE_URL, {
             method: "POST",
@@ -38,11 +38,12 @@ export const saveReview = async (selectedMovie, review) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                tmdbId: selectedMovie?.id,
-                posterPath: selectedMovie?.poster_path,
+                tmdbId: selectedMT?.id,
+                posterPath: selectedMT?.poster_path,
                 title: review.title,
                 content: review.content,
                 categoryId: review.categoryId,
+                firstYear: firstYear,
             }),
         });
 
@@ -70,7 +71,7 @@ export const deleteReview = async (id) => {
     return response;
 };
 
-export const updateReview = async (id, selectedMovie, review) => {
+export const updateReview = async (id, selectedMovie, review, firstYear) => {
     const response = await fetch(`${BASE_URL}/${id}`, {
         method: "PUT",
         headers: {
@@ -82,6 +83,7 @@ export const updateReview = async (id, selectedMovie, review) => {
             title: review.title,
             content: review.content,
             categoryId: review.categoryId,
+            firstYear: firstYear,
         }),
     });
 
